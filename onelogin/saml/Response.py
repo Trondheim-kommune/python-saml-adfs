@@ -119,8 +119,7 @@ class Response(object):
             not_before = condition.attrib.get('NotBefore', None)
 
         if not_before is None:
-            #notbefore condition is not mandatory. If it is not specified, use yesterday as not_before condition
-            not_before = (now-timedelta(1,0,0)).strftime('%Y-%m-%dT%H:%M:%SZ')
+            raise ResponseConditionError('Did not find NotBefore condition')
         if not_on_or_after is None:
             raise ResponseConditionError('Did not find NotOnOrAfter condition')
 
