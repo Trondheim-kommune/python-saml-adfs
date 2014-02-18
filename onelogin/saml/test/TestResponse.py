@@ -44,12 +44,12 @@ test_response = """<samlp:Response
          <saml:SubjectConfirmationData
            InResponseTo="identifier_1"
            Recipient="https://sp.example.com/SAML2/SSO/POST"
-           NotOnOrAfter="2004-12-05T09:27:05Z"/>
+           NotOnOrAfter="2004-12-05T09:27:05.123Z"/>
        </saml:SubjectConfirmation>
      </saml:Subject>
      <saml:Conditions
-       NotBefore="2004-12-05T09:17:05Z"
-       NotOnOrAfter="2004-12-05T09:27:05Z">
+       NotBefore="2004-12-05T09:17:05.123Z"
+       NotOnOrAfter="2004-12-05T09:27:05.123Z">
        <saml:AudienceRestriction>
          <saml:Audience>https://sp.example.com/SAML2</saml:Audience>
        </saml:AudienceRestriction>
