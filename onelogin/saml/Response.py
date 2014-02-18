@@ -2,6 +2,9 @@ import base64
 
 from lxml import etree
 from datetime import datetime, timedelta
+import platform
+import subprocess
+import tempfile
 
 from onelogin.saml import SignatureVerifier
 
@@ -53,6 +56,8 @@ class Response(object):
         if _etree is None:
             _etree = etree
 
+        self._was_encrypted = False
+
         decoded_response = _base64.b64decode(response)
         self._document = _etree.fromstring(decoded_response)
         self._signature = signature
@@ -61,9 +66,16 @@ class Response(object):
         # ADFS will provide milliseconds (handled by %f)
         return datetime.strptime(dt, '%Y-%m-%dT%H:%M:%S.%fZ')
 
+    def get_assertion_root(self):
+        if self._was_encrypted:
+            return '/samlp:Response/saml:EncryptedAssertion/saml:Assertion'
+        else:
+            return '/samlp:Response/saml:Assertion'
+
+
     def _get_name_id(self):
         result = self._document.xpath(
-            '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID',
+            self.get_assertion_root() + '/saml:Subject/saml:NameID',
             namespaces=namespaces,
             )
         length = len(result)
@@ -89,8 +101,51 @@ class Response(object):
         """
         Get the value of an AssertionAttribute, located in an Assertion/AttributeStatement/Attribute[@Name=attribute_name/AttributeValue tag
         """
-        result = self._document.xpath('/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="%s"]/saml:AttributeValue'%attribute_name,namespaces=namespaces)
+        result = self._document.xpath(self.get_assertion_root() + '/saml:AttributeStatement/saml:Attribute[@Name="%s"]/saml:AttributeValue'%attribute_name,namespaces=namespaces)
         return [n.text.strip() for n in result]
+
+    def decrypt(self, private_key_file):
+        with tempfile.NamedTemporaryFile() as xml_fp:
+            self.write_xml_to_file(self._document, xml_fp)
+            xmlsec_bin = self._get_xmlsec_bin()
+            decrypted_response = self.decrypt_xml(xml_fp.name, xmlsec_bin, private_key_file)
+            self._document = etree.fromstring(decrypted_response)
+            self._was_encrypted = True
+
+
+    @staticmethod
+    def _get_xmlsec_bin():
+        xmlsec_bin = 'xmlsec1'
+        if platform.system() == 'Windows':
+            xmlsec_bin = 'xmlsec.exe'
+
+        return xmlsec_bin
+
+    @staticmethod
+    def write_xml_to_file(document, xml_fp):
+        doc_str = etree.tostring(document)
+        xml_fp.write('<?xml version="1.0" encoding="utf-8"?>')
+        xml_fp.write(doc_str)
+        xml_fp.seek(0)
+
+    @staticmethod
+    def decrypt_xml(xml_filename, xmlsec_bin, private_key_file):
+        cmds = [
+            xmlsec_bin,
+            '--decrypt',
+            '--privkey-pem',
+            private_key_file,
+            xml_filename
+            ]
+
+        proc = subprocess.Popen(
+            cmds,
+            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            )
+        out, err = proc.communicate()
+        return out
+
 
     def is_valid(
         self,
@@ -107,7 +162,7 @@ class Response(object):
             _verifier = SignatureVerifier.verify
 
         conditions = self._document.xpath(
-            '/samlp:Response/saml:Assertion/saml:Conditions',
+            self.get_assertion_root() + '/saml:Conditions',
             namespaces=namespaces,
             )
 
