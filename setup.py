@@ -41,11 +41,11 @@ tests_require = [
         ]
 
 setup(
-    name='onelogin.saml',
+    name='adfs.saml',
     version='0.0.1',
-    description="Python client library for SAML Version 2.0",
+    description="Python client library for ADFS SAML Version 2.0",
     packages = find_packages(),
-    namespace_packages = ['onelogin'],
+    namespace_packages = ['adfs'],
     install_requires=install_requires,
     tests_require=tests_require,
     extras_require={'tests': tests_require},
@@ -53,7 +53,7 @@ setup(
     cmdclass={
         'example': ExampleCommand
         },
-    author='Andres Buritica',
-    author_email='andres@thelinuxkid.com',
-    url='https://github.com/onelogin/python-saml',
+    author='Kristian Bendiksen',
+    author_email='kristian.bendiksen@gmail.com',
+    url='https://github.com/Trondheim-kommune/python-saml-adfs/'
     )
