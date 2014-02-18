@@ -4,9 +4,9 @@ from lxml import etree
 from nose.tools import eq_ as eq
 from StringIO import StringIO
 
-from onelogin.saml import SignatureVerifier
+from adfs.saml import SignatureVerifier
 
-from onelogin.saml.test.util import assert_raises
+from adfs.saml.test.util import assert_raises
 
 class TestSignatureVerifier(object):
     def setUp(self):

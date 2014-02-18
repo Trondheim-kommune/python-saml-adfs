@@ -6,7 +6,7 @@ import platform
 import subprocess
 import tempfile
 
-from onelogin.saml import SignatureVerifier
+from adfs.saml import SignatureVerifier
 
 namespaces=dict(
     samlp='urn:oasis:names:tc:SAML:2.0:protocol',

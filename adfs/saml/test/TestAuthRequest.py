@@ -3,7 +3,7 @@ import fudge
 from datetime import datetime
 from nose.tools import eq_ as eq
 
-from onelogin.saml import AuthRequest
+from adfs.saml import AuthRequest
 
 class TestAuthRequest(object):
     def setUp(self):

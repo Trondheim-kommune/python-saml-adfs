@@ -5,8 +5,8 @@ import fudge
 
 from nose.tools import eq_ as eq
 
-from onelogin.saml.test.util import assert_raises
-from onelogin.saml import (
+from adfs.saml.test.util import assert_raises
+from adfs.saml import (
     Response,
     ResponseValidationError,
     ResponseNameIDError,
