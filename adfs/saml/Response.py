@@ -182,7 +182,8 @@ class Response(object):
         not_before = self._parse_datetime(not_before)
         not_on_or_after = self._parse_datetime(not_on_or_after)
 
-        if now < not_before:
+        # Allow five seconds wiggle room here since adfs server and client clocks drift
+        if now + timedelta(seconds=5) < not_before:
             raise ResponseValidationError(
                 'Current time is earlier than NotBefore condition'
                 )
