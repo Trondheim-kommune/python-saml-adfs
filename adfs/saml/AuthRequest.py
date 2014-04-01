@@ -84,6 +84,10 @@ def create(
         )
     authn_request.append(request_authn_context)
 
+    authn_context_class_windows = saml_maker.AuthnContextClassRef()
+    authn_context_class_windows.text = ('urn:federation:authentication:windows')
+    request_authn_context.append(authn_context_class_windows)
+
     authn_context_class_ref = saml_maker.AuthnContextClassRef()
     authn_context_class_ref.text = ('urn:oasis:names:tc:SAML:2.0:ac:classes:'
                                     + 'PasswordProtectedTransport'
