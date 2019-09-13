@@ -1,8 +1,8 @@
-from Response import (
+from .Response import (
     Response,
     ResponseValidationError,
     ResponseNameIDError,
     ResponseConditionError,
     )
-import AuthRequest
-import SignatureVerifier
+from . import AuthRequest
+from . import SignatureVerifier
