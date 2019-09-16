@@ -1,7 +1,7 @@
 import zlib
 import base64
 import uuid
-import urllib.request, urllib.parse, urllib.error
+import urllib
 
 from datetime import datetime
 from lxml import etree
