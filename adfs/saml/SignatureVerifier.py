@@ -18,13 +18,13 @@ class SignatureVerifierError(Exception):
 
 def _parse_stderr(proc):
     output = proc.stderr.read()
-    for line in output.split('\n'):
+    for line in output.split(b'\n'):
         line = line.strip()
         if line == 'OK':
             return True
         elif line == 'FAIL':
             [log.info('XMLSec: %s' % line)
-             for line in output.split('\n')
+             for line in output.split(b'\n')
              if line
              ]
             return False
