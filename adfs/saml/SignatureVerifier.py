@@ -20,9 +20,9 @@ def _parse_stderr(proc):
     output = proc.stderr.read()
     for line in output.split(b'\n'):
         line = line.strip()
-        if line == 'OK':
+        if line == b'OK':
             return True
-        elif line == 'FAIL':
+        elif line == b'FAIL':
             [log.info('XMLSec: %s' % line)
              for line in output.split(b'\n')
              if line
@@ -95,13 +95,13 @@ def verify(
                     ):
                     # If there's no matching 'END CERTIFICATE'
                     # cryptpAppKeyLoad will fail
-                    cert_fp.write(signature)
+                    cert_fp.write(signature.encode('utf-8'))
                 else:
                     cert_fp.write(
                         '{begin}\n{signature}\n{end}'.format(
-                            begin='-----BEGIN CERTIFICATE-----',
-                            signature=signature,
-                            end='-----END CERTIFICATE-----',
+                            begin=b'-----BEGIN CERTIFICATE-----',
+                            signature=signature.encode('utf-8'),
+                            end=b'-----END CERTIFICATE-----',
                             )
                         )
                 cert_fp.seek(0)
