@@ -42,7 +42,7 @@ tests_require = [
 
 setup(
     name='adfs.saml',
-    version='0.0.3.2',
+    version='0.0.3.4',
     description="Python client library for ADFS SAML Version 2.0",
     packages = find_packages(),
     namespace_packages = ['adfs'],
