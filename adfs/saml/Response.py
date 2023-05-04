@@ -124,7 +124,7 @@ class Response(object):
     @staticmethod
     def write_xml_to_file(document, xml_fp):
         doc_str = etree.tostring(document)
-        xml_fp.write('<?xml version="1.0" encoding="utf-8"?>')
+        xml_fp.write(b'<?xml version="1.0" encoding="utf-8"?>')
         xml_fp.write(doc_str)
         xml_fp.seek(0)
 

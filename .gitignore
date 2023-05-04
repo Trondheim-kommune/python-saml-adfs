@@ -15,3 +15,5 @@
 /eggs
 /build
 /dist
+.noseids
+.vscode/

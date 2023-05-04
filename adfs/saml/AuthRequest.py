@@ -2,6 +2,7 @@ import zlib
 import base64
 import uuid
 import urllib
+import urllib.parse
 
 from datetime import datetime
 from lxml import etree
@@ -98,7 +99,7 @@ def create(
     # Strip the first 2 bytes (header) and the last 4 bytes (checksum) to get the raw deflate
     deflated_request = compressed_request[2:-4]
     encoded_request = _base64.b64encode(deflated_request)
-    urlencoded_request = _urllib.urlencode(
+    urlencoded_request = urllib.parse.urlencode(
         [('SAMLRequest', encoded_request)],
         )
 
